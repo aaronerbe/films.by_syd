@@ -1,6 +1,6 @@
 //import Logo from '../Logo/Logo';
 import NavLinks from './NavLinks';
-//import { SocialIcons } from '../SocialIcons';
+import MobileNavLinks from './MobileNavLinks';
 
 export default function Navbar() {
 return (
@@ -11,17 +11,16 @@ return (
         {/*<Logo src="/logos/logo-lg.jpeg" alt="Films By Syd Logo" href="/" />*/}
         </div>
 
-        {/* Centered NavLinks */}
-        <div className="absolute left-1/2 transform -translate-x-1/2">
+        {/* Centered NavLinks for Desktop */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
         <NavLinks />
         </div>
 
-        {/* Right-aligned Social Icons (or empty space if not present) */}
-        <div className="flex-shrink-0">
-        {/* <SocialIcons /> */}
+        {/* Right-aligned Hamburger Icon for Mobile */}
+        <div className="md:hidden flex justify-center items-center w-full">
+        <MobileNavLinks />
         </div>
     </div>
-
     </nav>
 );
 }
