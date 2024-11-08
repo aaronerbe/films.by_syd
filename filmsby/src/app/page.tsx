@@ -20,7 +20,7 @@ export default function Home() {
     <div className="absolute inset-0 h-screen w-screen bg-cover bg-center">
       <BackgroundVideo videos={["/video/SamGarrett.mp4", "/video/TylerAddi.mp4", "/video/Aubrie.mp4"]} />
       <div className="flex items-center justify-center h-[300px]">
-      <h1 className="font-alt text-4xl lg:text-5xl font-bold text-white text-center">Films By Syd</h1>
+      <h1 className="font-alt text-4xl lg:text-5xl font-bold text-white text-center z-10">Films By Syd</h1>
 
       </div>
 
