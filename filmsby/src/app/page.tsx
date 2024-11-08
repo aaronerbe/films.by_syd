@@ -13,20 +13,23 @@
 //  );
 //}
 
-import {BackgroundVideo} from '@/app/components/BackgroundVideo'
+import {BackgroundVideo} from "@/app/components/BackgroundVideo";
 
 export default function Home() {
   return (
-    <div className="absolute inset-0 h-screen w-screen bg-cover bg-center">
+    <div className="relative w-full h-screen overflow-hidden bg-black">
       <BackgroundVideo videos={["/video/SamGarrett.mp4", "/video/TylerAddi.mp4", "/video/Aubrie.mp4"]} />
-      <div className="flex items-center justify-center h-[300px]">
-      <h1 className="font-alt text-4xl lg:text-5xl font-bold text-white text-center z-10">Films By Syd</h1>
-
+      
+      <div className="absolute inset-0 flex items-center justify-center h-[300px] z-10">
+        <h1 className="font-alt text-4xl lg:text-5xl font-bold text-white text-center">
+          Films By Syd
+        </h1>
       </div>
-
     </div>
   );
 }
+
+
 
 
 //export default function Home() {
