@@ -1,5 +1,5 @@
-////import Image from "next/image";
-////import Banner from "@/app/components/common/banner"
+//////import Image from "next/image";
+//////import Banner from "@/app/components/common/banner"
 
 export default function Home() {
   return (
@@ -12,3 +12,7 @@ export default function Home() {
     </div>
   );
 }
+
+
+
+
