@@ -31,7 +31,7 @@ return (
 
     {/* Full-Screen Mobile Menu Overlay */}
     {menuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-95 flex flex-col items-center pt-20 h-screen space-y-8 text-white text-xl font-alt z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center pt-20 h-screen space-y-8 text-white text-xl font-alt z-40">
         {links.map((link) => (
             <Link
             key={link.name}

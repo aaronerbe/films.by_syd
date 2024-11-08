@@ -17,7 +17,7 @@ import {BackgroundVideo} from "@/app/components/BackgroundVideo";
 
 export default function Home() {
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black">
+    <div className="absolute w-full h-screen overflow-hidden bg-black">
       <BackgroundVideo videos={["/video/SamGarrett.mp4", "/video/TylerAddi.mp4", "/video/Aubrie.mp4"]} />
       
       <div className="absolute inset-0 flex items-center justify-center h-[300px] z-10">
