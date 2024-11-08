@@ -17,7 +17,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "Films By Syd",
-  description: "Custom Cinematogrphy To Capture Your Special Event",
+  description: "Custom Videography To Capture Your Special Event",
 };
 
 export default function RootLayout({
