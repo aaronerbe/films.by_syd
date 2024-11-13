@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface VideoCarouselProps {
   videos: string[];
@@ -7,6 +7,27 @@ interface VideoCarouselProps {
 
 export default function VideoCarousel({ videos }: VideoCarouselProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [opacity, setOpacity] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]); // Array of refs to manage video elements
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (carouselRef.current) {
+        const rect = carouselRef.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const visibleRatio = Math.min(Math.max(1 - (rect.top / windowHeight) * 0.8, 0), 1);
+        setOpacity(visibleRatio);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const scrollTo = (index: number) => {
     if (carouselRef.current) {
@@ -16,41 +37,44 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
         left: targetScrollLeft,
         behavior: 'smooth',
       });
-      console.log(`Scrolling to index: ${index}, targetScrollLeft: ${targetScrollLeft}`);
+      setCurrentIndex(index);
     }
   };
 
-  const scrollLeft = () => {
-    if (carouselRef.current) {
-      const cardWidth = carouselRef.current.children[1]?.getBoundingClientRect().width || 0;
-      const currentIndex = Math.round(carouselRef.current.scrollLeft / cardWidth);
-      const newIndex = Math.max(0, currentIndex - 1);
-      scrollTo(newIndex);
+  const handleEdgeClick = (index: number) => {
+    // Pause the currently playing video if it exists and isn't the clicked video
+    if (videoRefs.current[currentIndex] && currentIndex !== index) {
+      videoRefs.current[currentIndex]?.pause();
     }
+    scrollTo(index);
   };
 
-  const scrollRight = () => {
-    if (carouselRef.current) {
-      const cardWidth = carouselRef.current.children[1]?.getBoundingClientRect().width || 0;
-      const currentIndex = Math.round(carouselRef.current.scrollLeft / cardWidth);
-      const newIndex = Math.min(videos.length - 1, currentIndex + 1);
-      scrollTo(newIndex);
+  const togglePlayPause = (index: number) => {
+    const video = videoRefs.current[index];
+
+    // Pause the currently playing video if it's not the same as the clicked video
+    if (currentIndex !== index) {
+      videoRefs.current[currentIndex]?.pause();
+    }
+
+    if (video) {
+      if (video.paused) {
+        video.play();
+        setCurrentIndex(index); // Update currently playing video
+      } else {
+        video.pause();
+        setCurrentIndex(-1); // Reset currently playing video
+      }
     }
   };
-
-  // On initial load, scroll to the start of the first video
-  useEffect(() => {
-    if (carouselRef.current) {
-      scrollTo(1); // Scroll to first video directly to center it
-    }
-  }, []);
 
   return (
     <div className="relative w-full overflow-hidden">
-      {/* Carousel Container */}
+      {/* Carousel Container with Opacity */}
       <div
         ref={carouselRef}
-        className="flex overflow-x-scroll snap-x snap-mandatory space-x-4 items-center scrollbar-hide"
+        className="flex overflow-x-scroll snap-x snap-mandatory space-x-4 items-center scrollbar-hide transition-opacity duration-700"
+        style={{ opacity }}
       >
         {/* Left Spacer */}
         <div className="flex-shrink-0 w-1/5"></div>
@@ -59,19 +83,32 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
         {videos.map((videoSrc, index) => (
           <div
             key={index}
-            className="snap-center flex-shrink-0 flex justify-center items-center"
+            className="snap-center flex-shrink-0 flex justify-center items-center relative"
             style={{
               maxWidth: '75%',
               aspectRatio: '16/9',
             }}
           >
-            <div className="w-full h-full max-h-[80%] bg-black rounded-3xl overflow-hidden shadow-lg flex justify-center items-center">
+            <div
+              className={`w-full h-full max-h-[80%] bg-black rounded-3xl overflow-hidden shadow-lg flex justify-center items-center transition duration-300 ${
+                (index === currentIndex - 1 || index === currentIndex + 1) && 'hover:opacity-60 cursor-pointer'
+              }`}
+              onClick={() => {
+                if (index === currentIndex - 1 || index === currentIndex + 1) {
+                  handleEdgeClick(index);
+                } else {
+                  togglePlayPause(index); // Play/Pause video on click
+                }
+              }}
+            >
               <video
+                ref={(el) => {
+                  videoRefs.current[index] = el; // Assign ref without returning it
+                }}
                 src={videoSrc}
                 className="max-w-[80%] max-h-[80%] object-contain rounded-3xl"
-                controls
                 muted
-                loop={true}
+                loop
               />
             </div>
           </div>
@@ -81,28 +118,18 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
         <div className="flex-shrink-0 w-1/5"></div>
       </div>
 
-      {/* Left Arrow */}
-      <button
-        onClick={scrollLeft}
-        className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-black bg-opacity-50 rounded-full text-white hidden md:block"
-      >
-        &#8592;
-      </button>
+    {/* Dots for current position */}
+    <div className="mx-auto flex justify-center items-center bg-gray-700 rounded-full px-8 py-4" style={{ width: 'fit-content' }}>
 
-      {/* Right Arrow */}
-      <button
-        onClick={scrollRight}
-        className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-black bg-opacity-50 rounded-full text-white hidden md:block"
-      >
-        &#8594;
-      </button>
-
-      {/* Dots for current position */}
-      <div className="flex justify-center space-x-2 mt-4">
+      <div className="flex space-x-2">
         {videos.map((_, index) => (
-          <div key={index} className="w-2 h-2 bg-gray-400 rounded-full"></div>
+          <div
+            key={index}
+            className={`w-4 h-4 rounded-full ${index === currentIndex ? 'bg-gray-300 w-16' : 'bg-gray-500'}`}
+          ></div>
         ))}
       </div>
+    </div>
     </div>
   );
 }
