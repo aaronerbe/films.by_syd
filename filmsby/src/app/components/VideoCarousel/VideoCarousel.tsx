@@ -9,7 +9,8 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [opacity, setOpacity] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]); // Array of refs to manage video elements
+  const [lastPlayedIndex, setLastPlayedIndex] = useState<number | null>(null);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +30,33 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
     };
   }, []);
 
+  useEffect(() => {
+    const handleCarouselScroll = () => {
+      if (carouselRef.current) {
+        const cardWidth = carouselRef.current.children[1]?.getBoundingClientRect().width || 0;
+        const scrollLeft = carouselRef.current.scrollLeft;
+        const newIndex = Math.round(scrollLeft / cardWidth);
+
+        if (newIndex !== currentIndex) {
+          // Pause the previously playing video
+          videoRefs.current[currentIndex]?.pause();
+
+          // Resume playback if the new index is the last played index
+          if (newIndex === lastPlayedIndex && videoRefs.current[newIndex]?.paused) {
+            videoRefs.current[newIndex]?.play();
+          }
+
+          setCurrentIndex(newIndex);
+        }
+      }
+    };
+
+    carouselRef.current?.addEventListener('scroll', handleCarouselScroll);
+    return () => {
+      carouselRef.current?.removeEventListener('scroll', handleCarouselScroll);
+    };
+  }, [currentIndex, lastPlayedIndex]);
+
   const scrollTo = (index: number) => {
     if (carouselRef.current) {
       const cardWidth = carouselRef.current.children[1]?.getBoundingClientRect().width || 0;
@@ -37,12 +65,13 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
         left: targetScrollLeft,
         behavior: 'smooth',
       });
+      
+      videoRefs.current[currentIndex]?.pause(); // Pause the current video before scrolling
       setCurrentIndex(index);
     }
   };
 
   const handleEdgeClick = (index: number) => {
-    // Pause the currently playing video if it exists and isn't the clicked video
     if (videoRefs.current[currentIndex] && currentIndex !== index) {
       videoRefs.current[currentIndex]?.pause();
     }
@@ -51,22 +80,24 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
 
   const togglePlayPause = (index: number) => {
     const video = videoRefs.current[index];
-
-    // Pause the currently playing video if it's not the same as the clicked video
-    if (currentIndex !== index) {
-      videoRefs.current[currentIndex]?.pause();
-    }
-
-    if (video) {
-      if (video.paused) {
-        video.play();
-        setCurrentIndex(index); // Update currently playing video
-      } else {
-        video.pause();
-        setCurrentIndex(-1); // Reset currently playing video
+  
+    // Only update play/pause state without affecting currentIndex if already on the current video
+    if (index === currentIndex) {
+      if (video) {
+        if (video.paused) {
+          video.play();
+          setLastPlayedIndex(index); // Track the last played video
+        } else {
+          video.pause();
+          setLastPlayedIndex(null); // Clear last played index when paused
+        }
       }
+    } else {
+      // This block would only run if we need to change videos, not for play/pause
+      setCurrentIndex(index);
     }
   };
+  
 
   return (
     <div className="relative w-full overflow-hidden">
@@ -77,20 +108,19 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
         style={{ opacity }}
       >
         {/* Left Spacer */}
-        <div className="flex-shrink-0 w-1/5"></div>
+        <div className="hidden sm:block flex-shrink-0 w-1/5"></div>
 
         {/* Video Cards */}
         {videos.map((videoSrc, index) => (
           <div
             key={index}
-            className="snap-center flex-shrink-0 flex justify-center items-center relative"
+            className="snap-center flex-shrink-0 flex justify-center items-center relative max-w-[100%] sm:max-w-[75%] w-full"
             style={{
-              maxWidth: '75%',
               aspectRatio: '16/9',
             }}
           >
             <div
-              className={`w-full h-full max-h-[80%] bg-black rounded-3xl overflow-hidden shadow-lg flex justify-center items-center transition duration-300 ${
+              className={`w-full h-full max-h-[100%] sm:max-h-[80%] bg-black sm:rounded-3xl overflow-hidden shadow-lg flex justify-center items-center transition duration-300 ${
                 (index === currentIndex - 1 || index === currentIndex + 1) && 'hover:opacity-60 cursor-pointer'
               }`}
               onClick={() => {
@@ -103,10 +133,10 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
             >
               <video
                 ref={(el) => {
-                  videoRefs.current[index] = el; // Assign ref without returning it
+                  videoRefs.current[index] = el;
                 }}
                 src={videoSrc}
-                className="max-w-[80%] max-h-[80%] object-contain rounded-3xl"
+                className="w-full h-full object-contain sm:max-w-[80%] sm:max-h-[80%] sm:rounded-3xl"
                 muted
                 loop
               />
@@ -115,11 +145,11 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
         ))}
 
         {/* Right Spacer */}
-        <div className="flex-shrink-0 w-1/5"></div>
+        <div className="hidden sm:block flex-shrink-0 w-1/5"></div>
       </div>
 
     {/* Dots for current position */}
-    <div className="mx-auto flex justify-center items-center bg-gray-700 rounded-full px-8 py-4" style={{ width: 'fit-content' }}>
+    <div className="mx-auto flex justify-center items-center bg-gray-700 rounded-full px-8 py-4 mt-4 sm:mt-8 mb-40 sm:mb-0 " style={{ width: 'fit-content' }}>
 
       <div className="flex space-x-2">
         {videos.map((_, index) => (
