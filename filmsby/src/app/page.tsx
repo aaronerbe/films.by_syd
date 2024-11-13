@@ -14,20 +14,30 @@
 //}
 
 import {BackgroundVideo} from "@/app/components/BackgroundVideo";
+import {VideoCarousel} from "@/app/components/VideoCarousel";
 
 export default function Home() {
   return (
-    <div className="absolute w-full h-screen overflow-hidden bg-black">
-      <BackgroundVideo videos={["/video/SamGarrett.mp4", "/video/TylerAddi.mp4", "/video/Aubrie.mp4"]} />
-      
-      <div className="absolute inset-0 flex items-center justify-center h-[300px] z-10">
-        <h1 className="font-alt text-4xl lg:text-5xl font-bold text-white text-center">
-          Films By Syd
-        </h1>
+    <div className="w-full min-h-screen bg-black overflow-x-hidden">
+      {/* Fullscreen Background Video Section */}
+      <div className="h-screen relative overflow-hidden">
+        <BackgroundVideo videos={["/video/SamGarrett.mp4", "/video/TylerAddi.mp4", "/video/Aubrie.mp4"]} speed={1} />
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <h1 className="font-alt text-4xl lg:text-5xl font-bold text-white text-center">
+            Films By Syd
+          </h1>
+        </div>
       </div>
+
+      {/* Video Carousel Section */}
+      <section className="py-12 px-4 bg-gray-900">
+        <h2 className="text-white text-3xl font-bold text-center mt-40">Video Highlights</h2>
+        <VideoCarousel videos={["/video/SamGarrett.mp4", "/video/TylerAddi.mp4", "/video/Aubrie.mp4"]} />
+      </section>
     </div>
   );
 }
+
 
 
 
