@@ -30,7 +30,7 @@ export default function Home() {
       </div>
 
       {/* Video Carousel Section */}
-      <section className="py-12 bg-gray-900">
+      <section className="py-12 px-2 bg-gray-900">
         <h2 className="text-white font-alt text-3xl font-bold text-center pt-10 pb-40 sm:pt-0 sm:pt-40 sm:pb-0">Video Highlights</h2>
         <VideoCarousel videos={["/video/SamGarrett.mp4", "/video/TylerAddi.mp4", "/video/Aubrie.mp4"]} />
       </section>

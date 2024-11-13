@@ -149,13 +149,13 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
       </div>
 
     {/* Dots for current position */}
-    <div className="mx-auto flex justify-center items-center bg-gray-700 rounded-full px-8 py-4 mt-4 sm:mt-8 mb-40 sm:mb-0 " style={{ width: 'fit-content' }}>
+    <div className="mx-auto flex justify-center items-center bg-gray-700 rounded-full px-8 py-4 mt-8 sm:mt-0 mb-40 sm:mb-0 " style={{ width: 'fit-content' }}>
 
       <div className="flex space-x-2">
         {videos.map((_, index) => (
           <div
             key={index}
-            className={`w-4 h-4 rounded-full ${index === currentIndex ? 'bg-gray-300 w-16' : 'bg-gray-500'}`}
+            className={`w-4 h-4 rounded-full ${index === currentIndex ? 'bg-gray-300 w-10' : 'bg-gray-500'}`}
           ></div>
         ))}
       </div>
