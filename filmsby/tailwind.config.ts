@@ -14,10 +14,13 @@ const config: Config = {
       colors: {
         //background: "var(--background)",
         //foreground: "var(--foreground)",
-        primary: '#1A202C', // Example color for primary color scheme
-        secondary: '#2D3748', // Secondary color
-        accent: '#F56565', // Accent color
-        background: '#EDF2F7', // Background color
+        //primary: '#1A202C', // Example color for primary color scheme
+        primary: '#2F4858', // Example color for primary color scheme
+        secondary: '#67713E', // Secondary color
+        accent: '#F26419', // Accent color
+        //background: '#EDF2F7', // Background color
+        background: '#DBCFB0', // Background color
+        //foreground: '#1A202C', // Foreground (text) color
         foreground: '#1A202C', // Foreground (text) color
         dark: {
           background: '#1A202C', // Dark mode background
