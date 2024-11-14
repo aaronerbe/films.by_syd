@@ -17,7 +17,7 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
       if (carouselRef.current) {
         const rect = carouselRef.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        const visibleRatio = Math.min(Math.max(1 - (rect.top / windowHeight) * 0.8, 0), 1);
+        const visibleRatio = Math.min(Math.max(1 - (rect.top / windowHeight * 0), 0), 1);// change the *0 to a number between 0 and 1 to fade in as you scroll.  0 = no fade in
         setOpacity(visibleRatio);
       }
     };
@@ -120,7 +120,7 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
             }}
           >
             <div
-              className={`w-full h-full max-h-[100%] sm:max-h-[80%] bg-black sm:rounded-3xl overflow-hidden shadow-lg flex justify-center items-center transition duration-300 ${
+              className={`w-full h-full max-h-[100%] sm:max-h-[80%] bg-primary sm:rounded-3xl overflow-hidden shadow-lg flex justify-center items-center transition duration-300 ${
                 (index === currentIndex - 1 || index === currentIndex + 1) && 'hover:opacity-60 cursor-pointer'
               }`}
               onClick={() => {
@@ -155,7 +155,7 @@ export default function VideoCarousel({ videos }: VideoCarouselProps) {
         {videos.map((_, index) => (
           <div
             key={index}
-            className={`w-4 h-4 rounded-full ${index === currentIndex ? 'bg-gray-300 w-10' : 'bg-gray-500'}`}
+            className={`w-4 h-4 rounded-full ${index === currentIndex ? 'bg-gray-300 w-16' : 'bg-gray-500'}`}
           ></div>
         ))}
       </div>

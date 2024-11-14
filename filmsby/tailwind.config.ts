@@ -12,8 +12,17 @@ const config: Config = {
         alt: ['"Montserrat"', 'sans-serif'], 
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        //background: "var(--background)",
+        //foreground: "var(--foreground)",
+        primary: '#1A202C', // Example color for primary color scheme
+        secondary: '#2D3748', // Secondary color
+        accent: '#F56565', // Accent color
+        background: '#EDF2F7', // Background color
+        foreground: '#1A202C', // Foreground (text) color
+        dark: {
+          background: '#1A202C', // Dark mode background
+          foreground: '#EDF2F7', // Dark mode foreground
+        },
       },
     },
   },

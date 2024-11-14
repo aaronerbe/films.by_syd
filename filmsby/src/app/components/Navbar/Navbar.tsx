@@ -4,7 +4,7 @@ import MobileNavLinks from './MobileNavLinks';
 
 export default function Navbar() {
 return (
-    <nav className="fixed top-0 w-full bg-black bg-opacity-50 backdrop-blur-md z-50 py-2">
+    <nav className="fixed top-0 w-full bg-background bg-opacity-50 backdrop-blur-md z-50 py-2">
     <div className="relative container mx-auto flex items-center justify-between px-4 min-h-10">
         {/* Left-aligned Logo */}
         <div className="flex-shrink-0">

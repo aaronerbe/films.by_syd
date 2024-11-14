@@ -13,7 +13,7 @@ export default function Portfolio() {
   
         {/* Content Layer */}
         <div className="relative z-10 flex items-center justify-center h-screen">
-          <h1 className="font-alt text-5xl font-bold text-white text-center h-[550px]">
+          <h1 className="font-alt text-5xl font-bold text-foreground text-center h-[550px]">
             Films By Syd
           </h1>
         </div>

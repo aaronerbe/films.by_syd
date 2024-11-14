@@ -23,7 +23,7 @@ return (
     {/* Centered Hamburger / Close Icon */}
     <button
         onClick={toggleMenu}
-        className="text-white focus:outline-none z-50"
+        className="text-foreground focus:outline-none z-50"
         aria-label="Toggle menu"
     >
         {menuOpen ? <FiX size={30} /> : <FiMenu size={30} />}
@@ -31,7 +31,7 @@ return (
 
     {/* Full-Screen Mobile Menu Overlay */}
     {menuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center pt-20 h-screen space-y-8 text-white text-xl font-alt z-40">
+        <div className="fixed inset-0 bg-background bg-opacity-90 flex flex-col items-center pt-20 h-screen space-y-8 text-foreground text-xl font-alt z-40">
         {links.map((link) => (
             <Link
             key={link.name}
