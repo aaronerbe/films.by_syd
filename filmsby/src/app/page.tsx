@@ -13,8 +13,8 @@
 //  );
 //}
 
-import {BackgroundVideo} from "@/app/components/BackgroundVideo";
-import {VideoCarousel} from "@/app/components/VideoCarousel";
+import BackgroundVideo from "@/app/components/BackgroundVideo";
+import VideoCarousel from "@/app/components/VideoCarousel";
 
 export default function Home() {
   return (

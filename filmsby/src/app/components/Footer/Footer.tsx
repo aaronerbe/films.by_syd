@@ -1,5 +1,5 @@
 import Logo from '../Logo/Logo';
-import {SocialIcons} from '../SocialIcons';
+import SocialIcons from '@/app/components/SocialIcons';
 
 export default function Footer() {
     return (
